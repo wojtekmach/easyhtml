@@ -1,8 +1,9 @@
 defmodule EasyHTML do
   @moduledoc """
-  EasyHTML makes it easy to work with HTML.
+  EasyHTML makes working with HTML easy.
 
-  EasyHTML is a tiny wrapper around [Floki](https://hex.pm/packages/floki) that adds:
+  It is a tiny wrapper around [Floki](https://hex.pm/packages/floki) that adds
+  conveniences for HTML nodes:
 
     * An `Inspect` implementation to pretty-print them
     * An `Access` implementation to easily traverse them
