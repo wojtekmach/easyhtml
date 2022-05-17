@@ -15,10 +15,10 @@ conveniences for HTML nodes:
 Mix.install([{:easyhtml, github: "wojtekmach/easyhtml"}])
 
 doc = EasyHTML.parse!("<p>Hello, <em>world</em>!</p>")
-#=> ~H[<p>Hello, <em>world</em>!</p>]
+#=> #EasyHTML[<p>Hello, <em>world</em>!</p>]
 
 doc["em"]
-#=> ~H[<em>world</em>]
+#=> #EasyHTML[<em>world</em>]
 
 to_string(doc)
 #=> "Hello, world!"
