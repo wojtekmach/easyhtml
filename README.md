@@ -1,6 +1,9 @@
 # EasyHTML
 
-EasyHTML is a tiny wrapper around [Floki](https://hex.pm/packages/floki) that adds:
+EasyHTML makes working with HTML easy.
+
+It is a tiny wrapper around [Floki](https://hex.pm/packages/floki) that adds
+conveniences for HTML nodes:
 
   * An `Inspect` implementation to pretty-print them
   * An `Access` implementation to search them
