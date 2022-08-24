@@ -12,7 +12,9 @@ conveniences for HTML nodes:
 ## Usage
 
 ```elixir
-Mix.install([{:easyhtml, github: "wojtekmach/easyhtml"}])
+Mix.install([
+  {:easyhtml, "~> 0.1.0"}
+])
 
 doc = EasyHTML.parse!("<p>Hello, <em>world</em>!</p>")
 #=> #EasyHTML[<p>Hello, <em>world</em>!</p>]
