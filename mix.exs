@@ -4,7 +4,7 @@ defmodule EasyHTML.MixProject do
   def project do
     [
       app: :easyhtml,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -34,7 +34,7 @@ defmodule EasyHTML.MixProject do
 
   defp deps do
     [
-      {:floki, "~> 0.32.0"},
+      {:floki, "~> 0.30"},
       {:ex_doc, ">= 0.0.0", only: :docs}
     ]
   end
