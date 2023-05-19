@@ -19,6 +19,8 @@ defmodule EasyHTMLTest do
     assert inspect(doc["p.headline"]) ==
              ~s|#EasyHTML[<p class="headline">Hello, World!</p>]|
 
+    refute doc["#bad"]
+
     assert to_string(doc) == "Hello, World!"
   end
 end

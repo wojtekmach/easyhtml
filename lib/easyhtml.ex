@@ -26,7 +26,13 @@ defmodule EasyHTML do
   end
 
   def fetch(%__MODULE__{} = struct, selector) when is_binary(selector) do
-    {:ok, %__MODULE__{nodes: Floki.find(struct.nodes, selector)}}
+    case Floki.find(struct.nodes, selector) do
+      [] ->
+        :error
+
+      nodes ->
+        {:ok, %__MODULE__{nodes: nodes}}
+    end
   end
 
   defimpl Inspect do
