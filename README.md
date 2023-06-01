@@ -13,14 +13,14 @@ conveniences for HTML nodes:
 
 ```elixir
 Mix.install([
-  {:easyhtml, "~> 0.1.0"}
+  {:easyhtml, "~> 0.3.0"}
 ])
 
 doc = EasyHTML.parse!("<p>Hello, <em>world</em>!</p>")
-#=> #EasyHTML[<p>Hello, <em>world</em>!</p>]
+#=> ~HTML[<p>Hello, <em>world</em>!</p>]
 
 doc["em"]
-#=> #EasyHTML[<em>world</em>]
+#=> ~HTML[<em>world</em>]
 
 to_string(doc)
 #=> "Hello, world!"

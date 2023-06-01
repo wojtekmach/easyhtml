@@ -21,8 +21,13 @@ defmodule EasyHTML do
 
   defstruct [:nodes]
 
+  defmacro sigil_HTML({:<<>>, _, [binary]}, []) do
+    Macro.escape(parse!(binary))
+  end
+
   def parse!(html) do
-    %__MODULE__{nodes: Floki.parse_document!(html)}
+    nodes = html |> Floki.parse_document!() |> mapify_attributes()
+    %__MODULE__{nodes: nodes}
   end
 
   def fetch(%__MODULE__{} = struct, selector) when is_binary(selector) do
@@ -31,18 +36,37 @@ defmodule EasyHTML do
         :error
 
       nodes ->
-        {:ok, %__MODULE__{nodes: nodes}}
+        {:ok, %__MODULE__{nodes: mapify_attributes(nodes)}}
     end
+  end
+
+  def to_string(%__MODULE__{} = struct) do
+    struct.nodes |> unmapify_attributes() |> Floki.text()
+  end
+
+  defp mapify_attributes([{tag, attrs, inner} | rest]) do
+    [{tag, Map.new(attrs), inner} | mapify_attributes(rest)]
+  end
+
+  defp mapify_attributes([]) do
+    []
+  end
+
+  defp unmapify_attributes([{tag, attrs, inner} | rest]) do
+    [{tag, Map.to_list(attrs), inner} | unmapify_attributes(rest)]
+  end
+
+  defp unmapify_attributes([]) do
+    []
   end
 
   defimpl Inspect do
     import Inspect.Algebra
 
     def inspect(struct, opts) do
-      open = "#EasyHTML["
-      sep = ""
+      open = "~HTML["
       close = "]"
-      container_opts = [separator: sep, break: :flex]
+      container_opts = [separator: "", break: :flex]
       container_doc(open, struct.nodes, close, opts, &fun/2, container_opts)
     end
 
@@ -66,9 +90,8 @@ defmodule EasyHTML do
           color(">", tag_color, opts)
         ])
 
-      sep = ""
       close = color("</#{tag}>", tag_color, opts)
-      container_opts = [separator: sep, break: :strict]
+      container_opts = [separator: "", break: :strict]
       container_doc(open, content, close, opts, &fun/2, container_opts)
     end
 

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.3.0 (2023-06-01)
+
+  * Add `~HTML` sigil
+
 ## v0.2.0 (2023-05-19)
 
   * `doc[selector]` now returns `nil` if no nodes were found.
