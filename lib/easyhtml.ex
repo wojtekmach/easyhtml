@@ -26,38 +26,18 @@ defmodule EasyHTML do
   end
 
   def parse!(html) do
-    nodes = html |> Floki.parse_document!() |> mapify_attributes()
-    %__MODULE__{nodes: nodes}
+    %__MODULE__{nodes: Floki.parse_document!(html, attributes_as_maps: true)}
   end
 
   def fetch(%__MODULE__{} = struct, selector) when is_binary(selector) do
     case Floki.find(struct.nodes, selector) do
-      [] ->
-        :error
-
-      nodes ->
-        {:ok, %__MODULE__{nodes: mapify_attributes(nodes)}}
+      [] -> :error
+      nodes -> {:ok, %__MODULE__{nodes: nodes}}
     end
   end
 
   def to_string(%__MODULE__{} = struct) do
-    struct.nodes |> unmapify_attributes() |> Floki.text()
-  end
-
-  defp mapify_attributes([{tag, attrs, inner} | rest]) do
-    [{tag, Map.new(attrs), inner} | mapify_attributes(rest)]
-  end
-
-  defp mapify_attributes([]) do
-    []
-  end
-
-  defp unmapify_attributes([{tag, attrs, inner} | rest]) do
-    [{tag, Map.to_list(attrs), inner} | unmapify_attributes(rest)]
-  end
-
-  defp unmapify_attributes([]) do
-    []
+    Floki.text(struct.nodes)
   end
 
   defimpl Inspect do
