@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.3.1 (2023-12-11)
+
+  * Make comparisons work for nested tags
+
 ## v0.3.0 (2023-06-01)
 
   * Add `~HTML` sigil
