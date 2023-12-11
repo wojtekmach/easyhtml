@@ -26,6 +26,32 @@ defmodule EasyHTMLTest do
     assert to_string(html) == "Hello, World!"
   end
 
+  test "nested attributes work" do
+    html = ~HTML"""
+    <!doctype html>
+    <html>
+    <body>
+      <p class="headline"><span class="abc">Hello, World!</span></p>
+    </body>
+    </html>
+    """
+
+    assert inspect(html) ==
+             ~s|~HTML[<html><body><p class="headline"><span class="abc">Hello, World!</span></p></body></html>]|
+
+    assert inspect(html["p.headline"]) ==
+             ~s|~HTML[<p class="headline"><span class="abc">Hello, World!</span></p>]|
+
+    assert ~HTML[<p class="headline"><span class="abc">Hello, World!</span></p>] =
+             html["p.headline"]
+
+    assert ~HTML[<p><span>Hello, World!</span></p>] = html["p.headline"]
+
+    refute html["#bad"]
+
+    assert to_string(html) == "Hello, World!"
+  end
+
   @tag :skip
   test "inspect" do
     html = ~HTML[<p id="p1">Hello, <em>world</em>!</p>]

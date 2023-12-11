@@ -34,7 +34,7 @@ defmodule EasyHTML.MixProject do
 
   defp deps do
     [
-      {:floki, "~> 0.30"},
+      {:floki, "~> 0.35"},
       {:ex_doc, ">= 0.0.0", only: :docs}
     ]
   end
