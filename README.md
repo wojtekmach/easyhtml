@@ -1,5 +1,8 @@
 # EasyHTML
 
+[![Version](https://img.shields.io/hexpm/v/easyhtml.svg)](https://hex.pm/packages/easyhtml)
+[![CI](https://github.com/wojtekmach/easyhtml/actions/workflows/ci.yml/badge.svg)](https://github.com/wojtekmach/easyhtml/actions/workflows/ci.yml)
+
 EasyHTML makes working with HTML easy.
 
 It is a tiny wrapper around [Floki](https://hex.pm/packages/floki) that adds
