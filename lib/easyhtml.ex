@@ -93,4 +93,22 @@ defmodule EasyHTML do
       Floki.text(struct.nodes)
     end
   end
+
+  defimpl Enumerable do
+    def count(_), do: {:error, __MODULE__}
+    def member?(_, _), do: {:error, __MODULE__}
+    def slice(_), do: {:error, __MODULE__}
+
+    def reduce(_list, {:halt, acc}, _fun), do: {:halted, acc}
+
+    def reduce(%EasyHTML{nodes: nodes}, acc, fun) do
+      reduce(nodes, acc, fun)
+    end
+
+    def reduce([], {:cont, acc}, _fun), do: {:done, acc}
+
+    def reduce([node | rest], {:cont, acc}, fun) do
+      reduce(rest, fun.(%EasyHTML{nodes: [node]}, acc), fun)
+    end
+  end
 end

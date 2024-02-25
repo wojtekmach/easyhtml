@@ -57,4 +57,28 @@ defmodule EasyHTMLTest do
     html = ~HTML[<p id="p1">Hello, <em>world</em>!</p>]
     assert inspect(html) == ~s|~HTML[<p id="p1">Hello, <em>world</em>!</p>]|
   end
+
+  test "enumarble" do
+    html = ~HTML[
+      <table>
+        <tr>
+          <td>A</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>B</td>
+          <td>2</td>
+        </tr>
+      </table>
+    ]
+
+    result =
+      for tr <- html["tr"], td <- tr["td"] do
+        assert is_struct(tr, EasyHTML)
+        assert is_struct(td, EasyHTML)
+        to_string(td)
+      end
+
+    assert result == ["A", "1", "B", "2"]
+  end
 end
