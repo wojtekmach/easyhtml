@@ -72,13 +72,11 @@ defmodule EasyHTMLTest do
       </table>
     ]
 
-    result =
-      for tr <- html["tr"], td <- tr["td"] do
-        assert is_struct(tr, EasyHTML)
-        assert is_struct(td, EasyHTML)
-        to_string(td)
-      end
+    assert Enum.to_list(html) == [html]
 
-    assert result == ["A", "1", "B", "2"]
+    assert Enum.to_list(html["tr"]) == [
+             ~HTML[<tr><td>A</td> <td>1</td></tr>],
+             ~HTML[<tr><td>B</td> <td>2</td></tr>]
+           ]
   end
 end
