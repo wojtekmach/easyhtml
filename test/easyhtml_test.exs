@@ -57,4 +57,26 @@ defmodule EasyHTMLTest do
     html = ~HTML[<p id="p1">Hello, <em>world</em>!</p>]
     assert inspect(html) == ~s|~HTML[<p id="p1">Hello, <em>world</em>!</p>]|
   end
+
+  test "enumarble" do
+    html = ~HTML[
+      <table>
+        <tr>
+          <td>A</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>B</td>
+          <td>2</td>
+        </tr>
+      </table>
+    ]
+
+    assert Enum.to_list(html) == [html]
+
+    assert Enum.to_list(html["tr"]) == [
+             ~HTML[<tr><td>A</td> <td>1</td></tr>],
+             ~HTML[<tr><td>B</td> <td>2</td></tr>]
+           ]
+  end
 end
