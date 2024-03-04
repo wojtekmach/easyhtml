@@ -4,8 +4,8 @@ defmodule EasyHTML.MixProject do
   def project do
     [
       app: :easyhtml,
-      version: "0.3.1",
-      elixir: "~> 1.12 or ~> 1.15",
+      version: "0.3.2",
+      elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       preferred_cli_env: [
