@@ -5,11 +5,11 @@
 
 EasyHTML makes working with HTML easy.
 
-It is a tiny wrapper around [Floki](https://hex.pm/packages/floki) that adds
-conveniences for HTML nodes:
+It is a tiny wrapper around [Floki](https://hex.pm/packages/floki) that adds conveniences:
 
   * An `Inspect` implementation to pretty-print them
   * An `Access` implementation to search them
+  * An `Enumerable` implementation to traverse them
   * A `String.Chars` implementation to convert them to text
 
 ## Usage
@@ -27,4 +27,9 @@ doc["em"]
 
 to_string(doc)
 #=> "Hello, world!"
+
+import EasyHTML, only: :sigils
+doc = ~HTML[<ul><li>foo</li><li>bar</li></ul>]
+Enum.to_list(doc["li"])
+#=> [~HTML[<li>foo</li>], ~HTML[<li>bar</li>]]
 ```

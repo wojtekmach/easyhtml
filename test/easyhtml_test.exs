@@ -1,6 +1,7 @@
 defmodule EasyHTMLTest do
   use ExUnit.Case, async: true
   import EasyHTML, only: [sigil_HTML: 2]
+  doctest EasyHTML
 
   test "it works" do
     html = ~HTML"""
