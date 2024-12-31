@@ -8,10 +8,6 @@ defmodule EasyHTML.MixProject do
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      preferred_cli_env: [
-        docs: :docs,
-        "hex.publish": :docs
-      ],
       docs: [
         main: "readme",
         extras: ["README.md", "CHANGELOG.md"]
@@ -22,6 +18,15 @@ defmodule EasyHTML.MixProject do
         links: %{
           "GitHub" => "https://github.com/wojtekmach/easyhtml"
         }
+      ]
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
+        docs: :docs,
+        "hex.publish": :docs
       ]
     ]
   end
