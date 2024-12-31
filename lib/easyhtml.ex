@@ -132,18 +132,6 @@ defimpl Enumerable, for: EasyHTML do
   def slice(_), do: {:error, __MODULE__}
 
   def reduce(%EasyHTML{nodes: nodes}, acc, fun) do
-    do_reduce(nodes, acc, fun)
-  end
-
-  def do_reduce(_list, {:halt, acc}, _fun) do
-    {:halted, acc}
-  end
-
-  def do_reduce([], {:cont, acc}, _fun) do
-    {:done, acc}
-  end
-
-  def do_reduce([node | rest], {:cont, acc}, fun) do
-    do_reduce(rest, fun.(%EasyHTML{nodes: [node]}, acc), fun)
+    Enumerable.List.reduce(nodes, acc, &fun.(%EasyHTML{nodes: [&1]}, &2))
   end
 end
