@@ -70,80 +70,80 @@ defmodule EasyHTML do
   def to_string(%__MODULE__{} = struct) do
     Floki.text(struct.nodes)
   end
+end
 
-  defimpl Inspect do
-    import Inspect.Algebra
+defimpl Inspect, for: EasyHTML do
+  import Inspect.Algebra
 
-    def inspect(struct, opts) do
-      open = "~HTML["
-      close = "]"
-      container_opts = [separator: "", break: :flex]
-      container_doc(open, struct.nodes, close, opts, &fun/2, container_opts)
-    end
+  def inspect(struct, opts) do
+    open = "~HTML["
+    close = "]"
+    container_opts = [separator: "", break: :flex]
+    container_doc(open, struct.nodes, close, opts, &fun/2, container_opts)
+  end
 
-    defp fun({tag, attributes, content}, opts) do
-      tag_color = :map
-      attribute_color = :map
+  defp fun({tag, attributes, content}, opts) do
+    tag_color = :map
+    attribute_color = :map
 
-      attributes =
-        for {name, value} <- attributes do
-          concat([
-            color(" #{name}=", attribute_color, opts),
-            color("\"#{value}\"", :string, opts)
-          ])
-        end
-        |> concat()
-
-      open =
+    attributes =
+      for {name, value} <- attributes do
         concat([
-          color("<#{tag}", tag_color, opts),
-          attributes,
-          color(">", tag_color, opts)
+          color(" #{name}=", attribute_color, opts),
+          color("\"#{value}\"", :string, opts)
         ])
+      end
+      |> concat()
 
-      close = color("</#{tag}>", tag_color, opts)
-      container_opts = [separator: "", break: :strict]
-      container_doc(open, content, close, opts, &fun/2, container_opts)
-    end
+    open =
+      concat([
+        color("<#{tag}", tag_color, opts),
+        attributes,
+        color(">", tag_color, opts)
+      ])
 
-    defp fun({:comment, content}, opts) do
-      color("<!-- #{content} -->", :comment, opts)
-    end
-
-    defp fun(string, opts) when is_binary(string) do
-      color(string, :string, opts)
-    end
-
-    defp fun(other, _opts) do
-      raise inspect(other)
-    end
+    close = color("</#{tag}>", tag_color, opts)
+    container_opts = [separator: "", break: :strict]
+    container_doc(open, content, close, opts, &fun/2, container_opts)
   end
 
-  defimpl String.Chars do
-    def to_string(struct) do
-      Floki.text(struct.nodes)
-    end
+  defp fun({:comment, content}, opts) do
+    color("<!-- #{content} -->", :comment, opts)
   end
 
-  defimpl Enumerable do
-    def count(_), do: {:error, __MODULE__}
-    def member?(_, _), do: {:error, __MODULE__}
-    def slice(_), do: {:error, __MODULE__}
+  defp fun(string, opts) when is_binary(string) do
+    color(string, :string, opts)
+  end
 
-    def reduce(%EasyHTML{nodes: nodes}, acc, fun) do
-      do_reduce(nodes, acc, fun)
-    end
+  defp fun(other, _opts) do
+    raise inspect(other)
+  end
+end
 
-    def do_reduce(_list, {:halt, acc}, _fun) do
-      {:halted, acc}
-    end
+defimpl String.Chars, for: EasyHTML do
+  def to_string(struct) do
+    Floki.text(struct.nodes)
+  end
+end
 
-    def do_reduce([], {:cont, acc}, _fun) do
-      {:done, acc}
-    end
+defimpl Enumerable, for: EasyHTML do
+  def count(_), do: {:error, __MODULE__}
+  def member?(_, _), do: {:error, __MODULE__}
+  def slice(_), do: {:error, __MODULE__}
 
-    def do_reduce([node | rest], {:cont, acc}, fun) do
-      do_reduce(rest, fun.(%EasyHTML{nodes: [node]}, acc), fun)
-    end
+  def reduce(%EasyHTML{nodes: nodes}, acc, fun) do
+    do_reduce(nodes, acc, fun)
+  end
+
+  def do_reduce(_list, {:halt, acc}, _fun) do
+    {:halted, acc}
+  end
+
+  def do_reduce([], {:cont, acc}, _fun) do
+    {:done, acc}
+  end
+
+  def do_reduce([node | rest], {:cont, acc}, fun) do
+    do_reduce(rest, fun.(%EasyHTML{nodes: [node]}, acc), fun)
   end
 end
