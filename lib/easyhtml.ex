@@ -130,16 +130,20 @@ defmodule EasyHTML do
     def member?(_, _), do: {:error, __MODULE__}
     def slice(_), do: {:error, __MODULE__}
 
-    def reduce(_list, {:halt, acc}, _fun), do: {:halted, acc}
-
     def reduce(%EasyHTML{nodes: nodes}, acc, fun) do
-      reduce(nodes, acc, fun)
+      do_reduce(nodes, acc, fun)
     end
 
-    def reduce([], {:cont, acc}, _fun), do: {:done, acc}
+    def do_reduce(_list, {:halt, acc}, _fun) do
+      {:halted, acc}
+    end
 
-    def reduce([node | rest], {:cont, acc}, fun) do
-      reduce(rest, fun.(%EasyHTML{nodes: [node]}, acc), fun)
+    def do_reduce([], {:cont, acc}, _fun) do
+      {:done, acc}
+    end
+
+    def do_reduce([node | rest], {:cont, acc}, fun) do
+      do_reduce(rest, fun.(%EasyHTML{nodes: [node]}, acc), fun)
     end
   end
 end
