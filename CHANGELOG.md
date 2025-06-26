@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## v0.4.0 (2025-06-26)
+
+  * Use LazyHTML.
+
+  * Add `EasyHTML.from_document/1` and `EasyHTML.from_fragment/1`.
+
+  * Deprecate `EasyHTML.parse!/1`.
+
+  * Deprecate `EasyHTML.to_string/1`.
+
+  * Deprecate `String.Chars` implementation for `EasyHTML`.
+
+  * Remove ability to match e.g.: `~HTML[<p>...</p>] = ...`
+
 ## v0.3.1 (2023-12-11)
 
   * Make comparisons work for nested tags
