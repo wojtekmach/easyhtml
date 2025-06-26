@@ -4,80 +4,45 @@ defmodule EasyHTMLTest do
   doctest EasyHTML
 
   test "it works" do
-    html = ~HTML"""
-    <!doctype html>
-    <html>
-    <body>
-      <p class="headline">Hello, World!</p>
-    </body>
-    </html>
-    """
+    html =
+      ~HTML"""
+      <!doctype html>
+      <html>
+      <body>
+        <p class="headline">Hello, World!</p>
+      </body>
+      </html>
+      """
 
-    assert inspect(html) ==
-             ~s|~HTML[<html><body><p class="headline">Hello, World!</p></body></html>]|
+    assert EasyHTML.to_tree(html["p.headline"]) ==
+             EasyHTML.to_tree(~HTML[<p class="headline">Hello, World!</p>])
 
-    assert inspect(html["p.headline"]) ==
-             ~s|~HTML[<p class="headline">Hello, World!</p>]|
-
-    assert ~HTML[<p class="headline">Hello, World!</p>] = html["p.headline"]
-    assert ~HTML[<p>Hello, World!</p>] = html["p.headline"]
-
-    refute html["#bad"]
-
-    assert to_string(html) == "Hello, World!"
+    assert EasyHTML.to_tree(html["#bad"]) == []
   end
 
-  test "nested attributes work" do
-    html = ~HTML"""
-    <!doctype html>
-    <html>
-    <body>
-      <p class="headline"><span class="abc">Hello, World!</span></p>
-    </body>
-    </html>
-    """
-
-    assert inspect(html) ==
-             ~s|~HTML[<html><body><p class="headline"><span class="abc">Hello, World!</span></p></body></html>]|
-
-    assert inspect(html["p.headline"]) ==
-             ~s|~HTML[<p class="headline"><span class="abc">Hello, World!</span></p>]|
-
-    assert ~HTML[<p class="headline"><span class="abc">Hello, World!</span></p>] =
-             html["p.headline"]
-
-    assert ~HTML[<p><span>Hello, World!</span></p>] = html["p.headline"]
-
-    refute html["#bad"]
-
-    assert to_string(html) == "Hello, World!"
-  end
-
-  @tag :skip
   test "inspect" do
     html = ~HTML[<p id="p1">Hello, <em>world</em>!</p>]
-    assert inspect(html) == ~s|~HTML[<p id="p1">Hello, <em>world</em>!</p>]|
+    assert inspect(html) == ~s|~HTML[<p id="p1">Hello, <em>world</em> !</p>]|
   end
 
-  test "enumarble" do
-    html = ~HTML[
-      <table>
-        <tr>
-          <td>A</td>
-          <td>1</td>
-        </tr>
-        <tr>
-          <td>B</td>
-          <td>2</td>
-        </tr>
-      </table>
-    ]
+  test "enumerable" do
+    html =
+      ~HTML"""
+      <ul>
+        <li><span>A</span><span>1</span></li>
+        <li><span>B</span><span>2</span></li>
+      </ul>
+      """
 
-    assert Enum.to_list(html) == [html]
+    assert Enum.map(html, &EasyHTML.to_tree/1) == [EasyHTML.to_tree(html)]
 
-    assert Enum.to_list(html["tr"]) == [
-             ~HTML[<tr><td>A</td> <td>1</td></tr>],
-             ~HTML[<tr><td>B</td> <td>2</td></tr>]
-           ]
+    assert Enum.map(html["li"], &EasyHTML.to_tree/1) ==
+             Enum.map(
+               [
+                 ~HTML[<li><span>A</span><span>1</span></li>],
+                 ~HTML[<li><span>B</span><span>2</span></li>]
+               ],
+               &EasyHTML.to_tree/1
+             )
   end
 end

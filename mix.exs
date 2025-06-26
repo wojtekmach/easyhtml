@@ -4,8 +4,8 @@ defmodule EasyHTML.MixProject do
   def project do
     [
       app: :easyhtml,
-      version: "0.3.2",
-      elixir: "~> 1.12",
+      version: "0.4.0-dev",
+      elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       docs: [
@@ -31,15 +31,9 @@ defmodule EasyHTML.MixProject do
     ]
   end
 
-  def application do
-    [
-      extra_applications: [:logger]
-    ]
-  end
-
   defp deps do
     [
-      {:floki, "~> 0.35"},
+      {:lazy_html, "~> 0.1.3"},
       {:ex_doc, ">= 0.0.0", only: :docs}
     ]
   end
